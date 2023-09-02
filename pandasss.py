@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_excel('C://Users//User//Downloads//баллы.xlsx')
+file_path = '/home/ftpuser/баллы.xlsx'
+df = pd.read_excel(file_path)
 
 df = df.iloc[5:]
 df.columns = df.iloc[0]
