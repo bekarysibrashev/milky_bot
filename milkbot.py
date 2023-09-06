@@ -7,6 +7,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ParseMode
 import aioredis
 import pandasss
+from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 
@@ -24,6 +25,9 @@ dp.middleware.setup(LoggingMiddleware())
 class WaitForCode(StatesGroup):
     waiting_for_code = State()
 
+class Back(StatesGroup):
+    go_back = State()
+
 # Создаем словарь для хранения кодов пользователей
 saved_code = {}
 
@@ -31,13 +35,148 @@ saved_code = {}
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     user_id = message.from_user.id
+
+    
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=False)
+
+    button1 = KeyboardButton('⭐ Узнать количество бонусов')
+    keyboard.add(button1)
+    button2 = KeyboardButton('📒 Каталог продукции')
+    keyboard.add(button2)
+    button3 = KeyboardButton('📍Адреса фирменных киосков')
+    keyboard.add(button3)
+    button4 = KeyboardButton('☎️Служба поддержки')
+    keyboard.add(button4)
+    button5 = KeyboardButton('🪩 Мы в Instagram')
+    keyboard.add(button5)
+    button6 = KeyboardButton('📃 Условия покупательского клуба ML')
+    keyboard.add(button6)
+    
+
+    await message.reply("Здравствуйте! Я бот помощник MilkyBot. Выберите действие")
+    await message.reply("Сәлеметсіз бе! Мен көмекші бот MilkyBot. Әрекетті таңдаңыз.", reply_markup=keyboard)
+    
+
+# ------------------------------------------------------------
+
+@dp.message_handler(Text(equals='⭐ Узнать количество бонусов'))
+async def hooray(message: types.Message):
+
     await WaitForCode.waiting_for_code.set()
-    await message.reply("Здравствуйте! Отправьте штрих-код бонусной карты для проверки накопленных бонусов на вашем счету.")
-    await message.reply("Сәлеметсіз бе! Сіздің шотыңыздағы жинақталған бонустарды тексеру үшін бонустық картаның штрих-кодын жіберіңіз.")
+    # await Back.go_back.set()
+
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=False)
+    button1 = KeyboardButton('Назад')
+    keyboard.add(button1)
+
+    await message.answer('Здравствуйте! Отправьте штрих-код бонусной карты для проверки накопленных бонусов на вашем счету.')
+    await message.answer('Cәлеметсіз бе! Сіздің шотыңыздағы жинақталған бонустарды тексеру үшін бонустық картаның штрих-кодын жіберіңіз.', reply_markup=keyboard)
 
 
-# Обработчик текстового сообщения после команды /start
-@dp.message_handler( state=WaitForCode.waiting_for_code)
+# --------------------------------------
+
+
+# @dp.message_handler(Text(equals='Назад'))
+# async def hooray(message: types.Message):
+#     await message.answer('Услов')
+
+
+# --------------------------------------
+
+
+@dp.message_handler(Text(equals='📃 Условия покупательского клуба ML'))
+async def hooray(message: types.Message):
+    await message.answer('Условия покупательского клуба вы можете просмотреть тут: http://milkyland.kz/club')
+
+
+# --------------------------------------
+
+
+
+@dp.message_handler(Text(equals='📒 Каталог продукции'))
+async def hooray(message: types.Message):
+    await message.answer('Каталог доступе по ссылке: http://milkyland.kz/product_line')
+
+
+
+# --------------------------------------
+
+
+
+@dp.message_handler(Text(equals='📍Адреса фирменных киосков'))
+async def hooray(message: types.Message):
+    await message.answer('''
+9 11 мкр., за ТД «Нектари, мини-рынок «Табыс»\n
+9 8 мкр., за мини - рынком, напротив маг. «Анвари\n
+9 12 мкр., мини - рынок «Табыс»\n
+ул. 101 Стр. бр., мини - рынок «Табыс»\n
+ост. «Дом ветеранов», около «Дастархан»\n
+р-и Жилгородок, мини-рынок «Табыс»\n
+ж/м «Нур - Актобе, Каргалы, 15 (ТД «Сити»)\n
+ул. Актанова, 59, напротив «Арай»\n
+ул. Есет батыра, 105 около ТД «Жанар»\n
+р-и «Малышка», ул. Заводская, 43\n
+пр. Абилкайыр-хана, 6, ост. «Спутник»\n
+ул. Сатпаева, 11, 23 школаул. Ш. Калдаякова, 276, около ТД "Сабыр"\n
+ул. Шернияза, 54, напротив «Музыкального колледжа»\n
+ул. Кереева, 2а, мини-рынок «Табыс»\n
+р-н Гмз, ул. Гастелло, 185, мини-рынок «Табыс»\n
+пр. А. Молдагуловой, 30а, рынок "Алия", молочный отдел\n
+9 г. Хромтау, ул. Есет батыра, 3в, около ТД «Баян»\n
+9 г. Хромтау, пр. Абая, 10 около ТД «даулетияри''')
+
+
+
+# --------------------------------------
+
+
+
+# Для показа номера службы поддержки
+@dp.message_handler(Text(equals='☎️Служба поддержки'))
+async def hooray(message: types.Message):
+    await message.answer('Номер службы поддержки: +7-771-650-50-04 ')
+
+
+# --------------------------------------
+
+
+@dp.message_handler(Text(equals='🪩 Мы в Instagram'))
+async def hooray(message: types.Message):
+    await message.answer('https://www.instagram.com/p/CpuF1hHM9s2/?igshid=MzRlODBiNWFlZA==')
+
+
+# --------------------------------------
+
+
+# На случай если пользователь случайно нажал на "Узнать бонусы". Этот обработчик заканчивает состояние ожидания штрих кода и возвращает клавиатуру меню
+@dp.message_handler(Text(equals='Назад'), state="*")
+async def goBack(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+
+    if current_state == WaitForCode.waiting_for_code.state:
+        await state.finish()
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=False)
+
+    button1 = KeyboardButton('⭐ Узнать количество бонусов')
+    keyboard.add(button1)
+    button2 = KeyboardButton('📒 Каталог продукции')
+    keyboard.add(button2)
+    button3 = KeyboardButton('📍Адреса фирменных киосков')
+    keyboard.add(button3)
+    button4 = KeyboardButton('☎️Служба поддержки')
+    keyboard.add(button4)
+    button5 = KeyboardButton('🪩 Мы в Instagram')
+    keyboard.add(button5)
+    button6 = KeyboardButton('📃 Условия покупательского клуба ML')
+    keyboard.add(button6)
+
+    await message.reply("Выберите действие", reply_markup=keyboard)
+    await message.reply("Әрекетті таңдаңыз")
+
+# --------------------------------------
+
+# Обработчик штрих кода после команды /Узнать количество бонусов
+@dp.message_handler(state=WaitForCode.waiting_for_code)
 async def save_code(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     print("Обработчик waiting for code активирован")
@@ -61,7 +200,7 @@ async def save_code(message: types.Message, state: FSMContext):
 
     # await message.reply(f'Владелец карты - {owner} \nНа счету {answer} баллов')
 
-
+# --------------------------------------
 
 # Команда для отображения сохраненного кода
 @dp.message_handler(commands=['showcode'])
@@ -74,12 +213,15 @@ async def show_code(message: types.Message):
         await message.reply("У вас нет сохраненного кода.")
     await dp.storage.close()
 
+
+   
+
+
+
 @dp.message_handler(commands=["*"])  # Обработчик для любого состояния
 async def check_state(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     await message.answer(f"Текущее состояние: {current_state}")
-
-
 
 if __name__ == '__main__':
     from aiogram import executor
