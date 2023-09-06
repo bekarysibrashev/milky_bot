@@ -24,11 +24,11 @@ def bonus_amount(code):
     if not filtered_data.empty:
         respond = filtered_data.values[0]
         respond1 = owner.values[0]
-        print(respond)
+        # print(respond)
     else:
         respond = 'Непарвильный штриход'
         respond1 = None
-        print(respond)
+        # print(respond)
     return respond, respond1
 
 # bonus_amount(code)

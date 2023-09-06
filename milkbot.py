@@ -32,7 +32,8 @@ saved_code = {}
 async def start(message: types.Message):
     user_id = message.from_user.id
     await WaitForCode.waiting_for_code.set()
-    await message.reply("Пожалуйста, отправьте ваш код.")
+    await message.reply("Здравствуйте! Отправьте штрих-код бонусной карты для проверки накопленных бонусов на вашем счету.")
+    await message.reply("Сәлеметсіз бе! Сіздің шотыңыздағы жинақталған бонустарды тексеру үшін бонустық картаның штрих-кодын жіберіңіз.")
 
 
 # Обработчик текстового сообщения после команды /start
@@ -42,22 +43,23 @@ async def save_code(message: types.Message, state: FSMContext):
     print("Обработчик waiting for code активирован")
     text = message.text
 
+    owner = None
 
     if text in pandasss.codes:
 
         saved_code[user_id] = text
         answer, owner = pandasss.bonus_amount(text)
         await state.finish()
+        await message.reply(f'Владелец карты - {owner} \nНа счету {answer} баллов')
     else:
-        answer = 'Код не найден, попробуйте ввести код еще раз'
-    # current_state = await state.get_state()
-    # await message.answer(f"Текущее состояние: {current_state}")
-   
+        # answer = 'Проверьте корректно ли введены данные'
+        await message.reply(f'Проверьте корректно ли введены данные')
+        await message.reply(f'Деректердің дұрыс енгізілгенін тексеріңіз')
     # Сбрасываем состояние
     
     print('обработчик waiting for code завершен')
 
-    await message.reply(f'Владелец карты - {owner} \nНа счету {answer} баллов')
+    # await message.reply(f'Владелец карты - {owner} \nНа счету {answer} баллов')
 
 
 
