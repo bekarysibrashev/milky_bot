@@ -76,9 +76,21 @@ async def hooray(message: types.Message):
 # --------------------------------------
 
 
-# @dp.message_handler(Text(equals='Назад'))
-# async def hooray(message: types.Message):
-#     await message.answer('Услов')
+
+#Для отправки файла условия бонусной карты   
+async def send_file(chat_id):
+    # Замените 'file_path' на путь к вашему файлу
+    # file_path = 'C:/Users/User/Desktop/milky bot tg/uslov.docx'
+    file_path1 = 'C:/Users/User/Desktop/milky bot tg/uslov_rus.docx'
+    file_path2 = 'C:/Users/User/Desktop/milky bot tg/uslov_kaz.docx'
+    
+    # Отправляем файл
+    with open(file_path1, 'rb') as file1:
+        await bot.send_document(chat_id, file1)
+
+    
+    with open(file_path2, 'rb') as file2:
+        await bot.send_document(chat_id, file2)
 
 
 # --------------------------------------
@@ -87,7 +99,7 @@ async def hooray(message: types.Message):
 @dp.message_handler(Text(equals='📃 Условия покупательского клуба ML'))
 async def hooray(message: types.Message):
     await message.answer('Условия покупательского клуба вы можете просмотреть тут: http://milkyland.kz/club')
-
+    await send_file(message.chat.id)
 
 # --------------------------------------
 
@@ -214,7 +226,7 @@ async def show_code(message: types.Message):
     await dp.storage.close()
 
 
-   
+ 
 
 
 
