@@ -9,7 +9,7 @@ import aioredis
 import pandasss
 from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-
+import os
 
 
 
@@ -54,6 +54,9 @@ async def start(message: types.Message):
     keyboard.add(button5)
     button6 = KeyboardButton('📃 Условия покупательского клуба ML')
     keyboard.add(button6)
+    button7 = KeyboardButton('💵 Цены на товары')
+    keyboard.add(button7)
+    
     
     await message.reply("Сәлеметсіз бе! Мен көмекші бот MilkyBot. Әрекетті таңдаңыз.", reply_markup=keyboard)
     await message.reply("Здравствуйте! Я бот помощник MilkyBot. Выберите действие")
@@ -99,7 +102,21 @@ async def send_file(chat_id):
 
 # --------------------------------------
 
+# Отправьте фотографии
+@dp.message_handler(Text(equals='💵 Цены на товары'))
+async def hooray(message: types.Message):
+    await send_pdf(message.chat.id)
 
+
+async def send_pdf(chat_id):
+    path = os.path.abspath('C:/Users/User/Desktop/milky bot tg/Прайс-лист фирменных киосков “MilkyLand”.pdf')
+    with open(path, 'rb') as pdf_prices:
+
+        await bot.send_document(chat_id, pdf_prices, caption='Цены на товары')
+
+
+
+#---------------------------------------
 @dp.message_handler(Text(equals='📃 Условия покупательского клуба ML'))
 async def hooray(message: types.Message):
     await message.answer('Сатып алушы клубының ережелері мен шарттарын мына жерден көруге болады: http://milkyland.kz/club')
@@ -124,9 +141,10 @@ async def hooray(message: types.Message):
 
 @dp.message_handler(Text(equals='📍Адреса фирменных киосков'))
 async def hooray(message: types.Message):
+    await message.answer('https://2gis.kz/aktobe/geo/70000001036503049')
     await message.answer('''
-11 мкр., за ТД «Нектари, мини-рынок «Табыс»\n
-8 мкр., за мини - рынком, напротив маг. «Анвари\n
+11 мкр., за ТД «Нектар», мини-рынок «Табыс»\n
+8 мкр., за мини - рынком, напротив маг. «Анвар»\n
 12 мкр., мини - рынок «Табыс»\n
 ул. 101 Стр. бр., мини - рынок «Табыс»\n
 ост. «Дом ветеранов», около «Дастархан»\n
@@ -142,7 +160,7 @@ async def hooray(message: types.Message):
 р-н Гмз, ул. Гастелло, 185, мини-рынок «Табыс»\n
 пр. А. Молдагуловой, 30а, рынок "Алия", молочный отдел\n
 г. Хромтау, ул. Есет батыра, 3в, около ТД «Баян»\n
-г. Хромтау, пр. Абая, 10 около ТД «даулетияри''')
+г. Хромтау, пр. Абая, 10 около ТД «даулетияр»''')
 
 
 
@@ -191,7 +209,9 @@ async def goBack(message: types.Message, state: FSMContext):
     keyboard.add(button5)
     button6 = KeyboardButton('📃 Условия покупательского клуба ML')
     keyboard.add(button6)
-
+    button7 = KeyboardButton('💵 Цены на товары')
+    keyboard.add(button7)
+    
     await message.reply("Әрекетті таңдаңыз")
 
     await message.reply("Выберите действие", reply_markup=keyboard)
