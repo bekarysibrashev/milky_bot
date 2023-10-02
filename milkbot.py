@@ -192,7 +192,7 @@ async def hooray(message: types.Message):
 @dp.message_handler(Text(equals='Назад'), state="*")
 async def goBack(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
-
+    # await state.finish()
     if current_state == WaitForCode.waiting_for_code.state:
         await state.finish()
     keyboard = ReplyKeyboardMarkup(resize_keyboard=False)
@@ -231,7 +231,7 @@ async def save_code(message: types.Message, state: FSMContext):
 
         saved_code[user_id] = text
         answer, owner = pandasss.bonus_amount(text)
-        await state.finish()
+    
         await message.reply(f'Карта иесі - {owner} \nСiздiң шотыңызда {answer} балл')
         await message.reply(f'Владелец карты - {owner} \nНа счету {answer} баллов')
 
