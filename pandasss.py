@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # file_path = '/home/ftpuser/баллы.xlsx'
-file_path = "C:/Users/User/bonuses.xlsx"
+file_path = '/home/ftpuser/Остатки бонусных баллов (XLSX).xlsx'
 # file_path = "C:/Users/User/Desktop/milky bot tg/баллы.xlsx"
 df1= pd.read_excel(file_path)
 
